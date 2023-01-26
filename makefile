@@ -19,7 +19,13 @@ CXXFLAGS = -g -std=c++14 -pedantic -fpermissive -fopenmp -O3
 main: main.o Simulation.o InputReader.o OutputWriter.o trace_tools.o TupleMergeOnline.o TupleMergeOffline.o SlottedTable.o DISCPAC.o IntervalTree.o LongestIncreasingSubsequence.o SortableRulesetPartitioner.o misc.o MITree.o OptimizedMITree.o PartitionSort.o red_black_tree.o RuleSplitter.o stack.o cmap.o TupleSpaceSearch.o IntervalUtilities.o EffectiveGrid.o MapExtensions.o Tcam.o
 	$(CXX) $(CXXFLAGS) -o main *.o $(LIBS)
 
+tm_experiments: tm_experiments.o Simulation.o InputReader.o OutputWriter.o trace_tools.o TupleMergeOnline.o TupleMergeOffline.o SlottedTable.o DISCPAC.o IntervalTree.o LongestIncreasingSubsequence.o SortableRulesetPartitioner.o misc.o MITree.o OptimizedMITree.o PartitionSort.o red_black_tree.o RuleSplitter.o stack.o cmap.o TupleSpaceSearch.o IntervalUtilities.o EffectiveGrid.o MapExtensions.o Tcam.o
+	$(CXX) $(CXXFLAGS) -o tm_experiments *.o $(LIBS)
+
 # -------------------------------------------------------------------
+
+tm_experiments.o: tm_experiments.cpp ElementaryClasses.h SortableRulesetPartitioner.h InputReader.h Simulation.h BruteForce.h cmap.h TupleSpaceSearch.h trace_tools.h PartitionSort.h IntervalUtilities.h hash.h OptimizedMITree.h
+	$(CXX) $(CXXFLAGS) -c tm_experiments.cpp
 
 main.o: main.cpp ElementaryClasses.h SortableRulesetPartitioner.h InputReader.h Simulation.h BruteForce.h cmap.h TupleSpaceSearch.h trace_tools.h PartitionSort.h IntervalUtilities.h hash.h OptimizedMITree.h
 	$(CXX) $(CXXFLAGS) -c main.cpp
