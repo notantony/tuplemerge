@@ -158,18 +158,18 @@ void TupleMergeOnline::InsertRule(const Rule& rule) {
 	for (auto table : tables) {
 		if (table->CanInsert(tuple)) {
 			bool hasChanged = false;
-			table->Insertion(rule, hasChanged);
+			table->Insertion(rule, hasChanged); // Whether the table's max priority has changed
 			assignments[rule.priority] = table;
 			
 			if (table->NumCollisions(rule) > collideLimit) {
 				// Split Table
-				vector<Rule> collisions = table->Collisions(rule);
+				vector<Rule> collisions = table->Collisions(rule); // Retrieve all the collided rules
 				Tuple compatTuple;
-				BestTuple(collisions, compatTuple);
+				BestTuple(collisions, compatTuple);  // Max common tuple, ~max over all dimensions
 				Tuple superTuple = compatTuple;
 				for (const Rule& r : collisions) {
 					Tuple t;
-					PreferedTuple(r, t);
+					PreferedTuple(r, t);  // ~rule prefix lengths
 					for (size_t d = 0; d < tuple.size(); d++) {
 						superTuple[d] = max(superTuple[d], t[d]);
 					}
