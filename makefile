@@ -9,10 +9,12 @@ TRACEPATH = ClassBenchTraceGenerator/
 TREEPATH = Trees/
 UTILPATH = Utilities/
 BVPATH = BitVector/
-VPATH = $(OVSPATH) $(MITPATH) $(TRACEPATH) $(IOPATH) $(UTILPATH) $(FORGEPATH) $(TREEPATH) $(SPPATH) $(BVPATH) $(SQLPATH)
+EXTENDEDPATH = extended/
+VPATH = $(OVSPATH) $(MITPATH) $(TRACEPATH) $(IOPATH) $(UTILPATH) $(FORGEPATH) $(TREEPATH) $(SPPATH) $(BVPATH) $(SQLPATH) $(EXTENDEDPATH)
 
 CXX = g++
 CXXFLAGS = -g -std=c++14 -pedantic -fpermissive -fopenmp -O3
+# CXXFLAGS = -g -std=c++14 -pedantic -fpermissive -fopenmp -fsanitize=address,leak,undefined
 
 # Targets needed to bring the executable up to date
 
@@ -21,6 +23,9 @@ main: main.o Simulation.o InputReader.o OutputWriter.o trace_tools.o TupleMergeO
 
 tm_experiments: tm_experiments.o Simulation.o InputReader.o OutputWriter.o trace_tools.o TupleMergeOnline.o TupleMergeOffline.o SlottedTable.o DISCPAC.o IntervalTree.o LongestIncreasingSubsequence.o SortableRulesetPartitioner.o misc.o MITree.o OptimizedMITree.o PartitionSort.o red_black_tree.o RuleSplitter.o stack.o cmap.o TupleSpaceSearch.o IntervalUtilities.o EffectiveGrid.o MapExtensions.o Tcam.o
 	$(CXX) $(CXXFLAGS) -o tm_experiments *.o $(LIBS)
+
+custom_rules_experiment: custom_rules_experiment.o Utils.o MyInputReader.o Simulation.o InputReader.o OutputWriter.o trace_tools.o TupleMergeOnline.o TupleMergeOffline.o SlottedTable.o DISCPAC.o IntervalTree.o LongestIncreasingSubsequence.o SortableRulesetPartitioner.o misc.o MITree.o OptimizedMITree.o PartitionSort.o red_black_tree.o RuleSplitter.o stack.o cmap.o TupleSpaceSearch.o IntervalUtilities.o EffectiveGrid.o MapExtensions.o Tcam.o
+	$(CXX) $(CXXFLAGS) -o custom_rules_experiment *.o $(LIBS)
 
 # -------------------------------------------------------------------
 
@@ -32,6 +37,17 @@ main.o: main.cpp ElementaryClasses.h SortableRulesetPartitioner.h InputReader.h 
 
 Simulation.o: Simulation.cpp Simulation.h ElementaryClasses.h
 	$(CXX) $(CXXFLAGS) -c Simulation.cpp
+
+custom_rules_experiment.o: custom_rules_experiment.cpp ElementaryClasses.h SortableRulesetPartitioner.h InputReader.h Simulation.h BruteForce.h cmap.h TupleSpaceSearch.h trace_tools.h PartitionSort.h IntervalUtilities.h hash.h OptimizedMITree.h
+	$(CXX) $(CXXFLAGS) -c custom_rules_experiment.cpp
+
+# ** Extended - the code extending the basic version of lib **
+
+MyInputReader.o: MyInputReader.h ElementaryClasses.h
+	$(CXX) $(CXXFLAGS) -c $(EXTENDEDPATH)MyInputReader.cpp
+
+Utils.o: Utils.h ElementaryClasses.h
+	$(CXX) $(CXXFLAGS) -c $(EXTENDEDPATH)Utils.cpp
 
 # ** IO **
 

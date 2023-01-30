@@ -112,13 +112,14 @@ public:
 
 	int MaxPriority() const { return maxPriority; };
 	
+	// This one was protected initially
+	std::vector<int> dims;
 protected:
 	uint32_t inline HashRule(const Rule& r) const;
 	uint32_t inline HashPacket(const Packet& p) const;
 	
 	cmap map_in_tuple;
 
-	std::vector<int> dims;
 	std::vector<unsigned int> lengths;
 	
 	int maxPriority = -1;

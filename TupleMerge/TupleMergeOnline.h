@@ -64,13 +64,14 @@ public:
 		return tables[index]->MaxPriority();
 	}
 
+	// Initially, this one was protected, but we need to go deeper
+	std::vector<SlottedTable*> tables;
 protected:
 	void Resort() {
 		sort(tables.begin(), tables.end(), [](auto& tx, auto& ty) { return tx->MaxPriority() > ty->MaxPriority(); });
 	}
 	SlottedTable* FindOrMake(const TupleMergeUtils::Tuple& t);
 	
-	std::vector<SlottedTable*> tables;
 	std::unordered_map<int, SlottedTable*> assignments; // Priority -> Table
 
 	std::vector<Rule> rules;
