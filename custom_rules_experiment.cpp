@@ -5,6 +5,7 @@
 
 #include "extended/MyInputReader.h"
 #include "extended/Utils.h"
+#include "extended/RuleProcessing.h"
 
 #include "BruteForce.h"
 #include "TupleMerge/TupleMergeOnline.h"
@@ -33,6 +34,10 @@ int main(int argc, char* argv[]) {
 	string filterFile = GetOrElse(args, "f", "./custom_data/example1.txt");
 
 	vector<Rule> rules = MyInputReader::parseBinaryFilters(filterFile);
+	Utils::dumpRules(rules);
+	rules = RuleProcessing::expandStars(rules, 1, {FieldDA});
+	Utils::dumpRules(rules);
+	printf("%lu\n\n", rules.size());
 
 	// rules = Random::shuffle_vector(rules);
 

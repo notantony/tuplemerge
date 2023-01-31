@@ -133,6 +133,7 @@ void Relax(Tuple& tuple) {
 	int delta = tuple[FieldSA] - tuple[FieldDA];
 	if (-delta > deltaThreshold) {
 		tuple[FieldSA] = 0;
+		// Why not zero: Further there's a check: if (t[FieldSP] > 16) sol.push_back(FieldSP); otherwise we do not include it to our tuple
 		tuple[FieldSP] = 16;
 	} else if (delta > deltaThreshold) {
 		tuple[FieldDA] = 0;
@@ -165,11 +166,11 @@ void TupleMergeOnline::InsertRule(const Rule& rule) {
 				// Split Table
 				vector<Rule> collisions = table->Collisions(rule); // Retrieve all the collided rules
 				Tuple compatTuple;
-				BestTuple(collisions, compatTuple);  // Max common tuple, ~max over all dimensions
+				BestTuple(collisions, compatTuple);  // Max common tuple, ~element-wise min over all dimensions
 				Tuple superTuple = compatTuple;
 				for (const Rule& r : collisions) {
 					Tuple t;
-					PreferedTuple(r, t);  // ~rule prefix lengths
+					PreferedTuple(r, t);
 					for (size_t d = 0; d < tuple.size(); d++) {
 						superTuple[d] = max(superTuple[d], t[d]);
 					}

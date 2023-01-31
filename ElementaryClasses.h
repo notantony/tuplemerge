@@ -79,9 +79,13 @@ struct Rule
 		return true;
 	}
 
-	void Print() const {
+	void Print(bool with_lens = true) const {
 		for (int i = 0; i < dim; i++) {
-			printf("%u:%u ", range[i][LowDim], range[i][HighDim]);
+			printf("%u:%u", range[i][LowDim], range[i][HighDim]);
+			if (with_lens) {
+				printf("(%u)", prefix_length[i]);
+			}
+			printf(" ");
 		}
 		printf("\n");
 	}

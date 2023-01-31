@@ -49,10 +49,8 @@ vector<Rule> parseBinaryFilters(const string &filename) {
     }
 
     for (size_t i = 0; i < rules.size(); ++i) {
-        rules[i].priority = i;
-
-        printf("%lu) ", i);
-        rules[i].Print();
+        int priority = static_cast<int>(rules.size() - i); 
+        rules[i].priority = priority;
     }
 
     return rules;
