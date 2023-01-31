@@ -27,9 +27,11 @@ Examples (IPs length only):
 ### Case 2: We add a rule and now there are $> c$ collisions in the table
 This means that the current tuple is not specific enough. Now we want to create a separate table for all the rules collided by the key (there are exactly $c + 1$ of them in the table).
 1. Find the max common tuple $m_\ell$ for the collided rules (i.e. take minimum over each dimension). Ususally it should be good enough, but we slightly modify it.
-2. Find the dimension-wise max tuple $m_{max}$. Find the dimension $d$ with the greatest difference with the first tuple: $i: m_{max} [i] - m_\ell[i] \rightarrow max$.
+2. Find the dimension-wise max tuple $m_{max}$. Find the dimension $i$ with the greatest difference with the first tuple: $i: m_{max} [i] - m_\ell[i] \rightarrow max$.
 3. Set $m_\ell[i] = (m_{max} [i] + m_\ell[i]) / 2$. Use this a final tuple.
-4. Check if there's a table with such a tuple. If there's one, insert all the conflicted rules into it. Otherwise, create a new one, applying same dropping rules as in **3.** in the previous case.
+4. Check if there's a table with such a tuple:
+   - If there's one, try to insert all the conflicted rules into it. If some rule cannot be inserted (this can happen because we increased $i$-th dimension for $m_\ell$), leave it in the current table.
+   - Otherwise, create a new table with the tuple, applying same dropping rules as in **3.** in the previous case.
 
 Example:
 ```
