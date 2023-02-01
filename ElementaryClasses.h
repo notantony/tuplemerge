@@ -35,6 +35,7 @@
 #include <memory>
 #include <chrono> 
 #include <array>
+#include <stdexcept>
 #define FieldSA 0
 #define FieldDA 1
 #define FieldSP 2
@@ -79,7 +80,7 @@ struct Rule
 		return true;
 	}
 
-	void Print(bool with_lens = true) const {
+	void Print(bool with_lens = true, bool newline = true) const {
 		for (int i = 0; i < dim; i++) {
 			printf("%u:%u", range[i][LowDim], range[i][HighDim]);
 			if (with_lens) {
@@ -87,7 +88,26 @@ struct Rule
 			}
 			printf(" ");
 		}
-		printf("\n");
+		if (newline) {
+			printf("\n");
+		}
+	}
+
+	bool OverridesRule(const Rule &r) const {
+		if (dim != r.dim) {
+			throw std::invalid_argument("Dims do not match");
+		}
+		if (priority > r.priority) {
+			for (size_t i = 0; i < dim; ++i) {
+				if (!(range[i][LowDim] <= r.range[i][LowDim]
+						&& range[i][HighDim] >= r.range[i][HighDim])) {
+					return false;
+				}
+			}
+		} else {
+			return false;
+		}
+		return true;
 	}
 };
 

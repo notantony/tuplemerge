@@ -35,7 +35,9 @@ int main(int argc, char* argv[]) {
 
 	vector<Rule> rules = MyInputReader::parseBinaryFilters(filterFile);
 	Utils::dumpRules(rules);
-	rules = RuleProcessing::expandStars(rules, 1, {FieldDA});
+	rules = RuleProcessing::expandStars(rules, 2, {FieldDA});
+	Utils::dumpRules(rules);
+	rules = RuleProcessing::filterOverridden(rules, true);
 	Utils::dumpRules(rules);
 	printf("%lu\n\n", rules.size());
 

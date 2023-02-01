@@ -12,6 +12,8 @@
 #include "PartitionSort/PartitionSort.h"
 #include <stdio.h>
 
+#include "extended/RuleProcessing.h"
+
 #include <assert.h>
 #include <memory>
 #include <chrono>
@@ -35,7 +37,14 @@ int main(int argc, char* argv[]) {
 	vector<Rule> rules = InputReader::ReadFilterFile(filterFile);
 	// rules = Random::shuffle_vector(rules);
 
+	rules = RuleProcessing::expandStars(rules, 1, {FieldSA, FieldDA}, false);
+
+	size_t rulesBefore = rules.size();
+	rules = RuleProcessing::filterOverridden(rules);
+	printf("Filter: %lu -> %lu rules\n", rulesBefore, rules.size());
+
 	args["TM.Limit.Collide"] = "10";  // Max number of collisions per table, ~ `c` from the paper
+
 	TupleMergeOnline tmOnline = TupleMergeOnline(args);
 	tmOnline.ConstructClassifier(rules);
 	cout << tmOnline.NumTables() << " tables\n";
